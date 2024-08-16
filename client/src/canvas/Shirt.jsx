@@ -1,7 +1,5 @@
 import React from 'react';
-import { easing } from 'maath';
 import { useSnapshot } from 'valtio';
-import { useFrame } from '@react-three/fiber';
 import { Decal, useGLTF, useTexture } from '@react-three/drei';
 import state from '../store';
 
@@ -10,6 +8,14 @@ const Shirt = () => {
     const { nodes, materials } = useGLTF('./shirt_baked.glb');
     const logoTexture = useTexture(snap.logoDecal);
     const fullTexture = useTexture(snap.fullDecal);
+
+    // Set anisotropy if the texture exists
+    if (logoTexture) {
+        logoTexture.anisotropy = 16;
+    }
+    if (fullTexture) {
+        fullTexture.anisotropy = 16;
+    }
 
     return (
         <group>
@@ -20,7 +26,26 @@ const Shirt = () => {
                 material-roughness={1}
                 dispose={null}
             >
-                </mesh>
+                {snap.isFullTexture && (
+                    <Decal 
+                        position={[0, 0, 0]}
+                        rotation={[0, 0, 0]}
+                        scale={1}
+                        map={fullTexture}
+                    />
+                )}
+
+                {snap.isLogoTexture && (
+                    <Decal 
+                        position={[0, 0.04, 0.15]}
+                        rotation={[0, 0, 0]}
+                        scale={0.15}
+                        map={logoTexture}
+                        depthTest={false}
+                        depthWrite={true}
+                    />
+                )}
+            </mesh>
         </group>
     );
 };
