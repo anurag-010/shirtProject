@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSnapshot } from 'valtio';
 import state from '../store';
-import { EditorTabs, FilterTabs } from '../config/constants'; // Import FilterTabs
+import { EditorTabs, FilterTabs } from '../config/constants'; 
 import { fadeAnimation, slideAnimation } from '../config/motion';
-import Tab from '../components/Tab'; // Corrected import for Tab component
-import CustomButton from '../components/CustomButton'; // Corrected import for CustomButton
+import Tab from '../components/Tab'; 
+import CustomButton from '../components/CustomButton'; 
+import { logoShirt, stylishShirt } from '../assets';
+import ColorPicker from '../components/ColorPicker';
+import FilePicker from '../components/FilePicker';
+import AiPicker from '../components/AiPicker';
 
 const Customizer = () => {
   const snap = useSnapshot(state);
+  
+  const [file, setFile] = useState('');
+  const [prompt, setPrompt] = useState('');
+  const [generatingImg, setGeneratingImg] = useState(false);
+  const [activeFilterTab, setActiveFilterTab] = useState('');
+  const [activeEditorTab, setActiveEditorTab] = useState("logoShirt");
+
+  const generateTabContent = () => {
+    switch (activeEditorTab) {
+      case "colorpicker":
+        return <ColorPicker />;
+      case "filepicker":
+        return <FilePicker />;
+      case "aipicker":
+        return <AiPicker />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -24,19 +47,18 @@ const Customizer = () => {
                 {EditorTabs.map((tab) => (
                   <Tab 
                     key={tab.name}
-                    handleClick={() => {
-                      // Handle click event
-                    }}
+                    handleClick={() => setActiveEditorTab(tab.name)}
                     tab={tab}
                   />
                 ))}
+                {generateTabContent()}
               </div>
             </div>
           </motion.div>
 
           <motion.div
             className='absolute z-10 top-5 right-5' 
-            {...fadeAnimation} // Removed trailing colon ":" causing a syntax error
+            {...fadeAnimation}
           >
             <CustomButton
               type="filled"
@@ -53,12 +75,10 @@ const Customizer = () => {
             {FilterTabs.map((tab) => (
               <Tab 
                 key={tab.name}
-                handleClick={() => {
-              
-                }}
+                handleClick={() => setActiveFilterTab(tab.name)}
                 tab={tab}
                 isFilterTab
-                isActiveTab="" 
+                isActiveTab={activeFilterTab === tab.name}
               />
             ))}
           </motion.div>
