@@ -4,7 +4,7 @@ const state = proxy({
   color : "#EFBD48",
   isLogoTexture: true,
   isFullTexture: false,
-  logoDecal : './threejs.png',
-   fullDecal : './threejs.png'
+  logoDecal : './nownow.webp',
+   fullDecal : './nownow.webp'
 });
 export  default state;
