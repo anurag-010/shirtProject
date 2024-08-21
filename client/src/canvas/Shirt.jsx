@@ -22,7 +22,7 @@ const Shirt = () => {
     }
     if (fullTexture) {
         fullTexture.anisotropy = 16;
-    }
+    } 
 
     const stateString = JSON.stringify(snap);
 
